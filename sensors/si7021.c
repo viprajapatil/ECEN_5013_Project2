@@ -135,20 +135,20 @@ uint32_t i2cRead(int RegAddr)
 
        //send control byte and read from the register we
        //specified
-       I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_START);
+       I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
 
        //wait for MCU to finish transaction
        while(I2CMasterBusy(I2C0_BASE));
 
        //return data pulled from the specified register
        return_val[0] =  I2CMasterDataGet(I2C0_BASE);
-       I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_START);
+       I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
 
        //wait for MCU to finish transaction
        while(I2CMasterBusy(I2C0_BASE));
        return_val[1] =  I2CMasterDataGet(I2C0_BASE);
 
-       uint32_t r = return_val[0]<<4|return_val[1]>>4;
+       uint32_t r = (return_val[0] << 8 | return_val[1]);
 
        return r;
 
