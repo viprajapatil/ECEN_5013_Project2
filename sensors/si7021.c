@@ -52,9 +52,11 @@ uint32_t ADC0Value[1];
 uint16_t samplePeriod;
 uint32_t sequence;
 uint32_t rh, tp;
+float humidity_value, temp_val;
 
 #define SLAVE_ADDRESS 0x40
-//#define RegAddr 0xE0
+#define RH_ADDR 0xE5
+#define TEMP_ADDR 0xE0
 
 
 int a, b, c, d;
@@ -156,6 +158,24 @@ uint32_t i2cRead(int RegAddr)
 
     }
 
+float humidity(uint32_t rh)
+{
+    float final;
+    final = rh*125;
+    final = final/65536;
+    final = final - 6;
+    return final;
+    }
+
+float temp(uint32_t rh)
+{
+    float final;
+    final = rh*175.72;
+    final = final/65536;
+    final = final - 46.85;
+    return final;
+    }
+
 
 // Main function
 int main(void)
@@ -235,16 +255,12 @@ void TimerCallback2(TimerHandle_t xTimer2)
 {
     i2c_init();
 
-           //while(1)
-           //{
-           rh = i2cRead(0xE5);
+    rh = i2cRead(RH_ADDR);
+    tp = i2cRead(TEMP_ADDR);
+    humidity_val = humidity(rh)
+    temp_val = temp(tp)
 
-           tp = i2cRead(0xE3);
-           tp = (tp * 17572)>>16;
-           tp = tp - 4685;
-           tp = ((tp)>>2)/25;
-
-           UARTprintf("RH= %i, Tp= %i\n", rh, tp);
+    UARTprintf("RH= %f, Tp= %f\n", humidity_val, temp_val);
 }
 
 // Flash the LEDs on the launchpad
