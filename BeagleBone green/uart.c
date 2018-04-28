@@ -1,11 +1,12 @@
 //Reference: https://en.wikibooks.org/wiki/Serial_Programming/termios
 
 #include "uart.h"
+#include "string.h"
 
 struct termios *my_term;
 
 char * uart_driver = "/dev/ttyO4";
-
+char log_name[50];
 int fd;
 
 typedef struct
@@ -55,21 +56,14 @@ void termios_setup(struct termios * my_term, int descriptor)
 
 void read_byte(int fd,char *received)
 {
-    int retval;
-
-    if(retval = read(fd, received, 1)>0)
+    if(read(fd, received, 1)<0)
     {
-    	if (retval < 0)
-            perror("Read failed");    
-    }
-    else
-    {
-        printf("Cannot read");
+           perror("Read failed");    
     }
 }
 
 
-int main()
+int main(int argc, char *argv[])
 {
     uart_setup();
     sleep(1);
@@ -77,19 +71,27 @@ int main()
     int rec_data;
     char received_string[100];
 
+    memset(log_name, '\0', sizeof(log_name));
+    strncpy(log_name, argv[1], strlen(argv[1]));
+    FILE *fptr = fopen(log_name, "w");
+
     int i;
     int j,k=0;
     int flag1, flag2 = 0;
     message msg_struct;
+    //fptr = fopen("log_name", "a");
 
     //while(1)
-    /*{
+    {
     	do
     	{
+		fptr = fopen(log_name, "a");
     		read_byte(fd, &recv);
+		fprintf(fptr, "%c", recv);
 		//read(fd, &msg_struct, sizeof(msg_struct));
 		//printf("%d", msg_struct.data);
 		printf("%c", recv);
+		
 		if(recv == 'C')
 		{
 			flag1=1;
@@ -110,13 +112,16 @@ int main()
 			printf("ALERT DETECTED");
 		flag1 = flag2 = 0;
 		rec_data = (int)recv;
+		fclose(fptr);
     	}while(rec_data != 0);
-    }*/
+    }
     //while(1)
     {
-    char data[3] = "Nik";
-    i = write(fd, &data, sizeof(data));
-	printf("%d", i);
+    //char data[3] = "Nik";
+    //i = write(fd, &data, sizeof(data));
+//	printf("%d", i);
+	
     close(fd);
+    //fclose(fptr);
     }
 }
