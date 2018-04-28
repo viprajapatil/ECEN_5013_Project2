@@ -35,11 +35,18 @@
 #include "timers.h"
 
 /* @brief  ADC initialization
- * This function will initialize ADC
+ * This function will initialize ADC ch0
  * @param  void
  * @return void
  * */
-void adc_init();
+void adc_ch0_init();
+
+/* @brief  ADC initialization
+ * This function will initialize ADC ch1
+ * @param  void
+ * @return void
+ * */
+void adc_ch1_init();
 
 /* @brief  Conversion (CO in ppm)
  * This function will convert the value from ADC to ppm

@@ -14,10 +14,10 @@ driverlib/sysctl.obj: ../driverlib/inc/hw_nvic.h
 driverlib/sysctl.obj: ../driverlib/inc/hw_sysctl.h
 driverlib/sysctl.obj: ../driverlib/inc/hw_types.h
 driverlib/sysctl.obj: ../driverlib/inc/hw_flash.h
-driverlib/sysctl.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/cpu.h
-driverlib/sysctl.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/debug.h
-driverlib/sysctl.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/interrupt.h
-driverlib/sysctl.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/sysctl.h
+driverlib/sysctl.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/cpu.h
+driverlib/sysctl.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/debug.h
+driverlib/sysctl.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/interrupt.h
+driverlib/sysctl.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/sysctl.h
 
 ../driverlib/sysctl.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdbool.h: 
@@ -33,7 +33,7 @@ C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_stdint.h:
 ../driverlib/inc/hw_sysctl.h: 
 ../driverlib/inc/hw_types.h: 
 ../driverlib/inc/hw_flash.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/cpu.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/debug.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/interrupt.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/sysctl.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/cpu.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/debug.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/interrupt.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/sysctl.h: 

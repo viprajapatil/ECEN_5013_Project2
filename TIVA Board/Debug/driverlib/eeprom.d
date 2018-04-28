@@ -14,11 +14,11 @@ driverlib/eeprom.obj: ../driverlib/inc/hw_flash.h
 driverlib/eeprom.obj: ../driverlib/inc/hw_ints.h
 driverlib/eeprom.obj: ../driverlib/inc/hw_sysctl.h
 driverlib/eeprom.obj: ../driverlib/inc/hw_types.h
-driverlib/eeprom.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/debug.h
-driverlib/eeprom.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/flash.h
-driverlib/eeprom.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/interrupt.h
-driverlib/eeprom.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/sysctl.h
-driverlib/eeprom.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/eeprom.h
+driverlib/eeprom.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/debug.h
+driverlib/eeprom.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/flash.h
+driverlib/eeprom.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/interrupt.h
+driverlib/eeprom.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/sysctl.h
+driverlib/eeprom.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/eeprom.h
 
 ../driverlib/eeprom.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdbool.h: 
@@ -34,8 +34,8 @@ C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_stdint.h:
 ../driverlib/inc/hw_ints.h: 
 ../driverlib/inc/hw_sysctl.h: 
 ../driverlib/inc/hw_types.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/debug.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/flash.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/interrupt.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/sysctl.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/eeprom.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/debug.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/flash.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/interrupt.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/sysctl.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/eeprom.h: 

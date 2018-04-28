@@ -34,12 +34,25 @@
 #include "queue.h"
 #include "timers.h"
 
+
+
+
+/* @brief  UART send
+ * This function will send data to the BBG via UART
+ * @param  ptr: pointer which points to the struct to be send
+ *         struct_len: length of the struct
+ * @return void
+ * */
+//void UART_send(char* ptr, int struct_len);
+
+
 /* @brief  COnfigure UART0
  * This function will configure UART0
  * @param  void
  * @return void
  * */
 void ConfigureUART0(void);
+
 
 /* @brief  COnfigure UART2
  * This function will configure UART2

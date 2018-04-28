@@ -11,7 +11,6 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./gas_flame.obj" \
-"./logger.obj" \
 "./main.obj" \
 "./si7021.obj" \
 "./tm4c1294ncpdt_startup_ccs.obj" \
@@ -218,16 +217,16 @@ FreeRTOS_tiva_demo.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "gas_flame.obj" "logger.obj" "main.obj" "si7021.obj" "tm4c1294ncpdt_startup_ccs.obj" "uart.obj" "FreeRTOS\croutine.obj" "FreeRTOS\event_groups.obj" "FreeRTOS\list.obj" "FreeRTOS\queue.obj" "FreeRTOS\tasks.obj" "FreeRTOS\timers.obj" "FreeRTOS\portable\CCS\ARM_CM4F\port.obj" "FreeRTOS\portable\CCS\ARM_CM4F\portasm.obj" "FreeRTOS\portable\MemMang\heap_2.obj" "driverlib\adc.obj" "driverlib\aes.obj" "driverlib\can.obj" "driverlib\comp.obj" "driverlib\cpu.obj" "driverlib\crc.obj" "driverlib\des.obj" "driverlib\eeprom.obj" "driverlib\emac.obj" "driverlib\epi.obj" "driverlib\epi_workaround_ccs.obj" "driverlib\flash.obj" "driverlib\fpu.obj" "driverlib\gpio.obj" "driverlib\hibernate.obj" "driverlib\i2c.obj" "driverlib\interrupt.obj" "driverlib\lcd.obj" "driverlib\mpu.obj" "driverlib\pwm.obj" "driverlib\qei.obj" "driverlib\shamd5.obj" "driverlib\ssi.obj" "driverlib\sw_crc.obj" "driverlib\sysctl.obj" "driverlib\sysexc.obj" "driverlib\systick.obj" "driverlib\timer.obj" "driverlib\uart.obj" "driverlib\udma.obj" 
-	-$(RM) "driverlib\usb.obj" "driverlib\watchdog.obj" "drivers\pinout.obj" "utils\uartstdio.obj" 
-	-$(RM) "gas_flame.d" "logger.d" "main.d" "si7021.d" "tm4c1294ncpdt_startup_ccs.d" "uart.d" "FreeRTOS\croutine.d" "FreeRTOS\event_groups.d" "FreeRTOS\list.d" "FreeRTOS\queue.d" "FreeRTOS\tasks.d" "FreeRTOS\timers.d" "FreeRTOS\portable\CCS\ARM_CM4F\port.d" "FreeRTOS\portable\MemMang\heap_2.d" "driverlib\adc.d" "driverlib\aes.d" "driverlib\can.d" "driverlib\comp.d" "driverlib\cpu.d" "driverlib\crc.d" "driverlib\des.d" "driverlib\eeprom.d" "driverlib\emac.d" "driverlib\epi.d" "driverlib\flash.d" "driverlib\fpu.d" "driverlib\gpio.d" "driverlib\hibernate.d" "driverlib\i2c.d" "driverlib\interrupt.d" "driverlib\lcd.d" "driverlib\mpu.d" "driverlib\pwm.d" "driverlib\qei.d" "driverlib\shamd5.d" "driverlib\ssi.d" "driverlib\sw_crc.d" "driverlib\sysctl.d" "driverlib\sysexc.d" "driverlib\systick.d" "driverlib\timer.d" "driverlib\uart.d" "driverlib\udma.d" "driverlib\usb.d" "driverlib\watchdog.d" "drivers\pinout.d" "utils\uartstdio.d" 
+	-$(RM) "gas_flame.obj" "main.obj" "si7021.obj" "tm4c1294ncpdt_startup_ccs.obj" "uart.obj" "FreeRTOS\croutine.obj" "FreeRTOS\event_groups.obj" "FreeRTOS\list.obj" "FreeRTOS\queue.obj" "FreeRTOS\tasks.obj" "FreeRTOS\timers.obj" "FreeRTOS\portable\CCS\ARM_CM4F\port.obj" "FreeRTOS\portable\CCS\ARM_CM4F\portasm.obj" "FreeRTOS\portable\MemMang\heap_2.obj" "driverlib\adc.obj" "driverlib\aes.obj" "driverlib\can.obj" "driverlib\comp.obj" "driverlib\cpu.obj" "driverlib\crc.obj" "driverlib\des.obj" "driverlib\eeprom.obj" "driverlib\emac.obj" "driverlib\epi.obj" "driverlib\epi_workaround_ccs.obj" "driverlib\flash.obj" "driverlib\fpu.obj" "driverlib\gpio.obj" "driverlib\hibernate.obj" "driverlib\i2c.obj" "driverlib\interrupt.obj" "driverlib\lcd.obj" "driverlib\mpu.obj" "driverlib\pwm.obj" "driverlib\qei.obj" "driverlib\shamd5.obj" "driverlib\ssi.obj" "driverlib\sw_crc.obj" "driverlib\sysctl.obj" "driverlib\sysexc.obj" "driverlib\systick.obj" "driverlib\timer.obj" "driverlib\uart.obj" "driverlib\udma.obj" "driverlib\usb.obj" 
+	-$(RM) "driverlib\watchdog.obj" "drivers\pinout.obj" "utils\uartstdio.obj" 
+	-$(RM) "gas_flame.d" "main.d" "si7021.d" "tm4c1294ncpdt_startup_ccs.d" "uart.d" "FreeRTOS\croutine.d" "FreeRTOS\event_groups.d" "FreeRTOS\list.d" "FreeRTOS\queue.d" "FreeRTOS\tasks.d" "FreeRTOS\timers.d" "FreeRTOS\portable\CCS\ARM_CM4F\port.d" "FreeRTOS\portable\MemMang\heap_2.d" "driverlib\adc.d" "driverlib\aes.d" "driverlib\can.d" "driverlib\comp.d" "driverlib\cpu.d" "driverlib\crc.d" "driverlib\des.d" "driverlib\eeprom.d" "driverlib\emac.d" "driverlib\epi.d" "driverlib\flash.d" "driverlib\fpu.d" "driverlib\gpio.d" "driverlib\hibernate.d" "driverlib\i2c.d" "driverlib\interrupt.d" "driverlib\lcd.d" "driverlib\mpu.d" "driverlib\pwm.d" "driverlib\qei.d" "driverlib\shamd5.d" "driverlib\ssi.d" "driverlib\sw_crc.d" "driverlib\sysctl.d" "driverlib\sysexc.d" "driverlib\systick.d" "driverlib\timer.d" "driverlib\uart.d" "driverlib\udma.d" "driverlib\usb.d" "driverlib\watchdog.d" "drivers\pinout.d" "utils\uartstdio.d" 
 	-$(RM) "driverlib\epi_workaround_ccs.d" 
 	-$(RM) "FreeRTOS\portable\CCS\ARM_CM4F\portasm.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
 pre-build:
-	-astyle --options="C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/astyle_options" "C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/*.c" "C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/*.h" --exclude="C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib" --exclude="C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS"
+	-astyle --options="C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/astyle_options" "C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/*.c" "C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/*.h" --exclude="C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib" --exclude="C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS"
 	-@echo ' '
 
 .PHONY: all clean dependents

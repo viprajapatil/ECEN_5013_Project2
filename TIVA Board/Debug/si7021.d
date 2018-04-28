@@ -18,30 +18,30 @@ si7021.obj: ../drivers/pinout.h
 si7021.obj: ../driverlib/gpio.h
 si7021.obj: ../utils/uartstdio.h
 si7021.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdarg.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/inc/hw_memmap.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/inc/hw_memmap.h
 si7021.obj: ../driverlib/rom_map.h
 si7021.obj: ../driverlib/sysctl.h
 si7021.obj: ../driverlib/pin_map.h
 si7021.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdio.h
 si7021.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/inc/hw_types.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/inc/hw_types.h
 si7021.obj: ../driverlib/rom.h
 si7021.obj: ../driverlib/uart.h
 si7021.obj: ../driverlib/adc.h
 si7021.obj: ../driverlib/debug.h
 si7021.obj: ../driverlib/i2c.h
 si7021.obj: ../FreeRTOSConfig.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/FreeRTOS.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/FreeRTOS.h
 si7021.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stddef.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/projdefs.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/portable.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/deprecated_definitions.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/portable/CCS/ARM_CM4F/portmacro.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/mpu_wrappers.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/task.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/list.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/queue.h
-si7021.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/timers.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/projdefs.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/portable.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/deprecated_definitions.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/portable/CCS/ARM_CM4F/portmacro.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/mpu_wrappers.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/task.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/list.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/queue.h
+si7021.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/timers.h
 
 ../si7021.c: 
 ../si7021.h: 
@@ -61,27 +61,27 @@ C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h:
 ../driverlib/gpio.h: 
 ../utils/uartstdio.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdarg.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/inc/hw_memmap.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/inc/hw_memmap.h: 
 ../driverlib/rom_map.h: 
 ../driverlib/sysctl.h: 
 ../driverlib/pin_map.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdio.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/inc/hw_types.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/inc/hw_types.h: 
 ../driverlib/rom.h: 
 ../driverlib/uart.h: 
 ../driverlib/adc.h: 
 ../driverlib/debug.h: 
 ../driverlib/i2c.h: 
 ../FreeRTOSConfig.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/FreeRTOS.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/FreeRTOS.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stddef.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/projdefs.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/portable.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/deprecated_definitions.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/portable/CCS/ARM_CM4F/portmacro.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/mpu_wrappers.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/task.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/list.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/queue.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/FreeRTOS/include/timers.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/projdefs.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/portable.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/deprecated_definitions.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/portable/CCS/ARM_CM4F/portmacro.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/mpu_wrappers.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/task.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/list.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/queue.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/timers.h: 

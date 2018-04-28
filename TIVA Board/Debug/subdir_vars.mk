@@ -10,7 +10,6 @@ CMD_SRCS += \
 
 C_SRCS += \
 ../gas_flame.c \
-../logger.c \
 ../main.c \
 ../si7021.c \
 ../tm4c1294ncpdt_startup_ccs.c \
@@ -18,7 +17,6 @@ C_SRCS += \
 
 C_DEPS += \
 ./gas_flame.d \
-./logger.d \
 ./main.d \
 ./si7021.d \
 ./tm4c1294ncpdt_startup_ccs.d \
@@ -26,7 +24,6 @@ C_DEPS += \
 
 OBJS += \
 ./gas_flame.obj \
-./logger.obj \
 ./main.obj \
 ./si7021.obj \
 ./tm4c1294ncpdt_startup_ccs.obj \
@@ -34,7 +31,6 @@ OBJS += \
 
 OBJS__QUOTED += \
 "gas_flame.obj" \
-"logger.obj" \
 "main.obj" \
 "si7021.obj" \
 "tm4c1294ncpdt_startup_ccs.obj" \
@@ -42,7 +38,6 @@ OBJS__QUOTED += \
 
 C_DEPS__QUOTED += \
 "gas_flame.d" \
-"logger.d" \
 "main.d" \
 "si7021.d" \
 "tm4c1294ncpdt_startup_ccs.d" \
@@ -50,7 +45,6 @@ C_DEPS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../gas_flame.c" \
-"../logger.c" \
 "../main.c" \
 "../si7021.c" \
 "../tm4c1294ncpdt_startup_ccs.c" \

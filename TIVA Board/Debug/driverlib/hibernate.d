@@ -18,10 +18,10 @@ driverlib/hibernate.obj: ../driverlib/inc/hw_hibernate.h
 driverlib/hibernate.obj: ../driverlib/inc/hw_ints.h
 driverlib/hibernate.obj: ../driverlib/inc/hw_sysctl.h
 driverlib/hibernate.obj: ../driverlib/inc/hw_types.h
-driverlib/hibernate.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/debug.h
-driverlib/hibernate.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/hibernate.h
-driverlib/hibernate.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/interrupt.h
-driverlib/hibernate.obj: C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/sysctl.h
+driverlib/hibernate.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/debug.h
+driverlib/hibernate.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/hibernate.h
+driverlib/hibernate.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/interrupt.h
+driverlib/hibernate.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/sysctl.h
 
 ../driverlib/hibernate.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdbool.h: 
@@ -41,7 +41,7 @@ C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/xlocale/_time.h:
 ../driverlib/inc/hw_ints.h: 
 ../driverlib/inc/hw_sysctl.h: 
 ../driverlib/inc/hw_types.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/debug.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/hibernate.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/interrupt.h: 
-C:/Users/nikhi/workspace_v8.1/FreeRTOS_tiva_demo/driverlib/sysctl.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/debug.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/hibernate.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/interrupt.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/sysctl.h: 
