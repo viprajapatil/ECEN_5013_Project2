@@ -273,6 +273,11 @@ void Gas_Task(TimerHandle_t xTimer1)
 
                     xTaskNotify( AlertTaskHandle, Co_alert, eSetBits);
                 }
+        if (f<3.2)
+                {
+
+                     xTaskNotify( AlertTaskHandle, Sensor_disconnected, eSetBits);
+                }
 
     }
 
@@ -300,11 +305,16 @@ void Flame_Task(TimerHandle_t xTimer2)
                 msg_struct.alert = 0;
 
 
-        if (ADC1Value[0] < 350)
+        if (200 <= ADC1Value[0] && ADC1Value[0] <= 500)
         {
 
                 xTaskNotify( AlertTaskHandle, Flame_alert, eSetBits);
         }
+        if (ADC1Value[0] < 150)
+                        {
+
+                             xTaskNotify( AlertTaskHandle, Sensor_disconnected, eSetBits);
+                        }
         xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
     }
 
@@ -424,6 +434,16 @@ void Alert_Task(void *pvParameters)
                      }
                      xSemaphoreGive(my_sem);
                 }
+                if (NotifValue & Sensor_disconnected)
+                                {
+                                    if(xSemaphoreTake(my_sem, 250))
+                                    {
+
+                                        msg_struct.alert = 2;
+                                        xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
+                                     }
+                                     xSemaphoreGive(my_sem);
+                                }
             }
             }
 }
