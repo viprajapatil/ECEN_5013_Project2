@@ -47,7 +47,7 @@ void main(int argc, char *argv[])
 		exit(1);
 	}
 	memcpy(&server.sin_addr, hp->h_addr, hp->h_length);
-	server.sin_port = htons(6001);
+	server.sin_port = htons(6005);
 	
 	if(connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
 	{
