@@ -2,8 +2,40 @@
 
 #include "uart.h"
 #include "string.h"
+#include <stdio.h>
+#include <stdint.h>
+#include <pthread.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <fcntl.h> 
+#include <sys/stat.h>
+#include <mqueue.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <stdbool.h>
 
 struct termios *my_term;
+
+pthread_t read_thread;
+int read_thread_check;
+
+pthread_t write_thread;
+int write_thread_check;
+
+FILE * fptr;
+pthread_mutex_t pmutex;
 
 char * uart_driver = "/dev/ttyO4";
 char log_name[50];
@@ -12,9 +44,7 @@ int fd;
 typedef struct
 {
 	float data;
-	int data_len;
 	int TaskID;
-	int LogLevel;
 	int alert;
 }message;
 
@@ -23,6 +53,84 @@ void uart_setup();
 void termios_setup(struct termios * my_term, int descriptor);
 
 void read_byte(int fd, char * received);
+
+void * read_thread_func()
+{
+	/*do
+	{
+	char recv;
+	fptr = fopen(log_name, "a");
+    	read_byte(fd, &recv);
+	fprintf(fptr, "%c", recv);
+	fclose(fptr);
+	}while(recv != '\0');
+	close(fd);*/
+	char buffer[1024];
+	fptr = fopen(log_name, "w");
+	char recv = 'a';
+	message my_data;
+	int retval;
+	while(1)
+	{
+		fptr = fopen(log_name, "a");
+		pthread_mutex_lock(&pmutex);
+
+		//read_byte(fd, &recv);
+		retval = read(fd, &my_data, sizeof(message));
+		//message * received_data;
+		//received_data = (message *)buffer;
+
+		if(retval > 0 && my_data.TaskID != 0)
+		{
+			printf("Task Id: %d \n", my_data.TaskID);
+			fprintf(fptr, "Task Id: %d \n", my_data.TaskID);
+			
+			printf("Data: %f \n", my_data.data);			
+			fprintf(fptr, "Data: %f \n", my_data.data);
+
+			printf("Alert: %d \n", my_data.alert);
+			fprintf(fptr, "Alert: %d \n", my_data.alert);
+			
+			char msg_data_string[100];
+			if(my_data.alert == 1 && my_data.TaskID == 1)
+			{
+			strcpy(msg_data_string, "ALERT RECEIEVED FROM GAS SENSOR \n");
+			printf("%s", msg_data_string);
+			fprintf(fptr, "%s", msg_data_string);
+			}
+
+			if(my_data.alert == 1 && my_data.TaskID == 2)
+			{
+			strcpy(msg_data_string, "ALERT RECEIEVED FROM FLAME SENSOR \n");
+			printf("%s", msg_data_string);
+			fprintf(fptr, "%s", msg_data_string);
+			}
+
+			if(my_data.alert == 1 && my_data.TaskID == 3)
+			{
+			strcpy(msg_data_string, "ALERT RECEIEVED FROM TEMPERATURE SENSOR \n");
+			printf("%s", msg_data_string);
+			fprintf(fptr, "%s", msg_data_string);
+			}
+
+			fprintf(fptr, "%s", "\n");
+			printf("\n");
+		}
+//		fprintf(fptr, "%c", recv);
+//		printf("%c", recv);
+
+		pthread_mutex_unlock(&pmutex);
+		fclose(fptr);
+	}
+}
+
+void * write_thread_func()
+{
+	int i;
+	char data[3] = "Nik";
+        i = write(fd, &data, sizeof(data));
+	printf("%d", i);
+}
 
 void uart_setup()
 {
@@ -73,26 +181,40 @@ int main(int argc, char *argv[])
 
     memset(log_name, '\0', sizeof(log_name));
     strncpy(log_name, argv[1], strlen(argv[1]));
-    FILE *fptr = fopen(log_name, "w");
+    //fptr = fopen(log_name, "w");
 
     int i;
     int j,k=0;
     int flag1, flag2 = 0;
     message msg_struct;
+
+    read_thread_check = pthread_create(&read_thread, NULL, read_thread_func, NULL);
+	if(read_thread_check)
+	{
+		perror("Error creating read thread");
+		exit(-1);
+	}
+
+    /*write_thread_check = pthread_create(&write_thread, NULL, write_thread_func, NULL);
+	if(write_thread_check)
+	{
+		perror("Error creating read thread");
+		exit(-1);
+	}*/
     //fptr = fopen("log_name", "a");
 
     //while(1)
     {
-    	do
-    	{
-		fptr = fopen(log_name, "a");
-    		read_byte(fd, &recv);
-		fprintf(fptr, "%c", recv);
+    	//do
+    	//{
+		//fptr = fopen(log_name, "a");
+    		//read_byte(fd, &recv);
+		//fprintf(fptr, "%c", recv);
 		//read(fd, &msg_struct, sizeof(msg_struct));
 		//printf("%d", msg_struct.data);
-		printf("%c", recv);
+		//printf("%c", recv);
 		
-		if(recv == 'C')
+		/*if(recv == 'C')
 		{
 			flag1=1;
 			k=j;
@@ -112,8 +234,8 @@ int main(int argc, char *argv[])
 			printf("ALERT DETECTED");
 		flag1 = flag2 = 0;
 		rec_data = (int)recv;
-		fclose(fptr);
-    	}while(rec_data != 0);
+		fclose(fptr);*/
+    	//}while(rec_data != 0);
     }
     //while(1)
     {
@@ -121,7 +243,9 @@ int main(int argc, char *argv[])
     //i = write(fd, &data, sizeof(data));
 //	printf("%d", i);
 	
-    close(fd);
+    //close(fd);
     //fclose(fptr);
+	pthread_join(read_thread, NULL);
+	//pthread_join(write_thread, NULL);
     }
 }
