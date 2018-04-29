@@ -2,7 +2,7 @@
 
 #include "si7021.h"
 
-void i2c_init()
+ i2c_init()
 {
                 //enable GPIO peripheral that contains I2C 0
                 SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
@@ -28,37 +28,37 @@ uint32_t i2cRead(int RegAddr)
 {
     uint16_t return_val[2];
 
-       I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);
+           I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);
 
-       //specify register to be read
-       I2CMasterDataPut(I2C0_BASE, RegAddr);
+           //specify register to be read
+           I2CMasterDataPut(I2C0_BASE, RegAddr);
 
-       //send control byte and register address byte to slave device
-       I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
+           //send control byte and register address byte to slave device
+           I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
 
-       //wait for MCU to finish transaction
-       while(I2CMasterBusy(I2C0_BASE));
-       //while(!(I2CSlaveStatus(I2C0_BASE) & I2C_SLAVE_ACT_TREQ));
-       //specify that we are going to read from slave device
-       I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, true);
+           //wait for MCU to finish transaction
+           while(I2CMasterBusy(I2C0_BASE));
+           //while(!(I2CSlaveStatus(I2C0_BASE) & I2C_SLAVE_ACT_TREQ));
+           //specify that we are going to read from slave device
+           I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, true);
 
-       //send control byte and read from the register we
-       //specified
-       I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+           //send control byte and read from the register we
+           //specified
+           I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
 
-       //wait for MCU to finish transaction
-       while(I2CMasterBusy(I2C0_BASE));
+           //wait for MCU to finish transaction
+           while(I2CMasterBusy(I2C0_BASE));
 
-       //return data pulled from the specified register
-       return_val[0] =  I2CMasterDataGet(I2C0_BASE);
-       I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
+           //return data pulled from the specified register
+           return_val[0] =  I2CMasterDataGet(I2C0_BASE);
+           I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_RECEIVE);
 
-       //wait for MCU to finish transaction
-       while(I2CMasterBusy(I2C0_BASE));
-       return_val[1] =  I2CMasterDataGet(I2C0_BASE);
+           //wait for MCU to finish transaction
+           while(I2CMasterBusy(I2C0_BASE));
+           return_val[1] =  I2CMasterDataGet(I2C0_BASE);
 
-       uint32_t r = (return_val[0] << 8 | return_val[1]);
-       return r;
+           uint32_t r = (return_val[0] *256) + return_val[1];
+           return r;
     }
 
 double humidity(uint32_t rh)

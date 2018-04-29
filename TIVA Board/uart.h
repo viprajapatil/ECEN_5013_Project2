@@ -49,14 +49,18 @@
 /* @brief  COnfigure UART0
  * This function will configure UART0
  * @param  void
- * @return void
+ * @return 0: on success
+ *        -1: on error
  * */
-void ConfigureUART0(void);
+int ConfigureUART0(void);
 
 
 /* @brief  COnfigure UART2
  * This function will configure UART2
  * @param  void
- * @return void
+ * @return 0: on success
+ *        -1: on error
  * */
-void ConfigureUART2(void);
+int ConfigureUART2(void);
+
+void UARTIntHandler();

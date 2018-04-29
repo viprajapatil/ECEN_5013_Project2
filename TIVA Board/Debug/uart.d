@@ -46,6 +46,8 @@ uart.obj: ../si7021.h
 uart.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h
 uart.obj: ../gas_flame.h
 uart.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h
+uart.obj: ../driverlib/interrupt.h
+uart.obj: C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/inc/hw_ints.h
 
 ../uart.c: 
 ../main.h: 
@@ -93,3 +95,5 @@ C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/FreeRTOS/include/timers.h:
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h: 
 ../gas_flame.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdlib.h: 
+../driverlib/interrupt.h: 
+C:/Users/vipra/Apes2/FreeRTOS_tiva_demo/driverlib/inc/hw_ints.h: 

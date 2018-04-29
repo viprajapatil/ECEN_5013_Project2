@@ -37,16 +37,18 @@
 /* @brief  ADC initialization
  * This function will initialize ADC ch0
  * @param  void
- * @return void
+ * @return 0: on success
+ *        -1: on error
  * */
-void adc_ch0_init();
+int adc_ch0_init();
 
 /* @brief  ADC initialization
  * This function will initialize ADC ch1
  * @param  void
- * @return void
+ * @return 0: on success
+ *        -1: on error
  * */
-void adc_ch1_init();
+int adc_ch1_init();
 
 /* @brief  Conversion (CO in ppm)
  * This function will convert the value from ADC to ppm

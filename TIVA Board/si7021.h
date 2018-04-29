@@ -38,6 +38,7 @@
 volatile uint32_t rh, tp;
 double humidity_val, temp_val;
 uint32_t g_ui32SysClock;
+static uint16_t r;
 
 
 #define SLAVE_ADDRESS 0x40
@@ -47,9 +48,10 @@ uint32_t g_ui32SysClock;
 /* @brief  I2C initialization function
  * This function will initialize i2c
  * @param  void
- * @return void
+ * @return 0: on success
+ *        -1: on error
  * */
-void i2c_init();
+int i2c_init();
 
 /* @brief  I2C read
  * This function will read values from Si7021 sensor

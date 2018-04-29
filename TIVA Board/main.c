@@ -44,6 +44,7 @@
 #include "si7021.h"
 #include "uart.h"
 #include "gas_flame.h"
+#include "startup.h"
 //#include "logger.h"
 
 #define BAUD_RATE 115200
@@ -56,6 +57,7 @@ void Humidity_Task(void *pvParameters);
 void Temp_Task(void *pvParameters);
 void Log_Task(void *pvParameters);
 void Alert_Task(void *pvParameters);
+void UART_read(void *pvParameters);
 
 // Timer task declarations
 void Log_Task_timer(TimerHandle_t xTimer5);
@@ -87,6 +89,7 @@ TaskHandle_t Task3Handle;
 TaskHandle_t Task4Handle;
 TaskHandle_t LogTaskHandle;
 TaskHandle_t AlertTaskHandle;
+TaskHandle_t UARTTaskHandle;
 
 xQueueHandle queue_handle;
 
@@ -95,24 +98,25 @@ SemaphoreHandle_t sem_uart;
 
 QueueHandle_t myQueue;
 volatile char buff1[400] = {0};
+volatile char buff2[10] = {0};
 volatile char *ptr;
+volatile char *ptr2;
 volatile char abuff[400] = {0};
 volatile char *aptr;
 
 typedef struct{
     float data;
-    int data_len;
     int TaskID;
-    int LogLevel;
     int alert;
+    //char * string_msg
 }message;
 
 typedef enum
 {
-    Gas_task = 0,
-    Flame_task = 1,
-    Humidity_task = 2,
+    Gas_task = 1,
+    Flame_task = 2,
     Temperature_task = 3,
+    Humidity_task = 4,
 }task_id;
 
 typedef enum
@@ -130,7 +134,7 @@ typedef enum
     Sensor_disconnected = 16,
     }alert;
 
-message msg_struct;
+volatile message msg_struct;
 
 void UART_send(char* ptr, int len)
 {
@@ -157,22 +161,12 @@ int main(void)
 
         ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);    //Enable GPIO
 
-
-        ConfigureUART2();        //Initialize UART
-
-        Queue_init();
-
-        adc_ch0_init(); // ADC for gas sensor
-        adc_ch1_init(); // ADC for flame sensor
+        if (startup() == -1)
+            exit(-1);
 
         PinoutSet(false, false);
 
         ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
-
-        GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0);
-        GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
-
-        i2c_init();
 
         // Create tasks
 
@@ -182,8 +176,8 @@ int main(void)
         xTaskCreate(Flame_Task_timer, (const portCHAR *)"Flame task",
                 configMINIMAL_STACK_SIZE, NULL, 1, &Task2Handle);
 
-        xTaskCreate(Humidity_Task_timer, (const portCHAR *)"Humidity Task",
-                configMINIMAL_STACK_SIZE, NULL, 1, &Task3Handle);
+        /*xTaskCreate(Humidity_Task_timer, (const portCHAR *)"Humidity Task",
+                configMINIMAL_STACK_SIZE, NULL, 1, &Task3Handle);*/
 
         xTaskCreate(Temp_Task_timer, (const portCHAR *)"Temperature Task",
                 configMINIMAL_STACK_SIZE, NULL, 1, &Task4Handle);
@@ -194,12 +188,21 @@ int main(void)
         xTaskCreate(Alert_Task, (const portCHAR *)"Alert task",
                                         configMINIMAL_STACK_SIZE, NULL, 1, &AlertTaskHandle);
 
+        /*xTaskCreate(UART_read, (const portCHAR *)"UART read task",
+                                                configMINIMAL_STACK_SIZE, NULL, 1, &UARTTaskHandle);*/
+
+
         vTaskStartScheduler();
 
         while(1);
 
         return 0;
 }
+
+/**
+ * Gas_Task_timer, Flame_Task_timer, Humidity_Task_timer, Temp_Task_timer and Log_Task_timer triggers the timer after every 1 second
+ * and calls the Gas_Task, Flame_Task, Humidity_Task and Temp_Task respectively.
+ */
 
 void Gas_Task_timer(void *pvParameters)
 {
@@ -228,9 +231,9 @@ void Humidity_Task_timer(void *pvParameters)
 
 void Temp_Task_timer(void *pvParameters)
 {
-    TimerHandle_t xTimer4 = NULL;
-    xTimer4 = xTimerCreate("MyTimer4", pdMS_TO_TICKS(1000), pdTRUE, (void *)pvTimerGetTimerID(xTimer4), Temp_Task);
-    xTimerStart(xTimer4, portMAX_DELAY);
+    TimerHandle_t xTimer3 = NULL;
+    xTimer3 = xTimerCreate("MyTimer4", pdMS_TO_TICKS(1000), pdTRUE, (void *)pvTimerGetTimerID(xTimer3), Temp_Task);
+    xTimerStart(xTimer3, portMAX_DELAY);
     while(1);
 }
 
@@ -242,7 +245,9 @@ void Log_Task_timer(void *pvParameters)
     while(1);
 }
 
-
+/* Function: Gas_Task
+ * Description: Reads CO gas value, stores it in a struct and sends it to the Log_Task via IPC message queue.
+ */
 void Gas_Task(TimerHandle_t xTimer1)
 {
     if(xSemaphoreTake(my_sem, portMAX_DELAY))
@@ -258,16 +263,15 @@ void Gas_Task(TimerHandle_t xTimer1)
         float f = co_val(ADC0Value[0]);
 
         msg_struct.data = f;
-        msg_struct.data_len = sizeof(f);
         msg_struct.TaskID = Gas_task;
-        msg_struct.LogLevel = DATA;
         msg_struct.alert = 0;
+
         xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
 
         if (f>9)
                 {
+
                     xTaskNotify( AlertTaskHandle, Co_alert, eSetBits);
-                            //UARTprintf("CO gas exceeds the threshold!\n");
                 }
 
     }
@@ -276,6 +280,9 @@ void Gas_Task(TimerHandle_t xTimer1)
 
 }
 
+/* Function: Flame_Task
+ * Description: Reads Flame sensor value, stores it in a struct and sends it to the Log_Task via IPC message queue.
+ */
 void Flame_Task(TimerHandle_t xTimer2)
 {
     if(xSemaphoreTake(my_sem, portMAX_DELAY))
@@ -289,15 +296,14 @@ void Flame_Task(TimerHandle_t xTimer2)
 
 
                 msg_struct.data = ADC1Value[0];
-                msg_struct.data_len = sizeof(ADC1Value[0]);
                 msg_struct.TaskID = Flame_task;
-                msg_struct.LogLevel = DATA;
                 msg_struct.alert = 0;
+
 
         if (ADC1Value[0] < 350)
         {
+
                 xTaskNotify( AlertTaskHandle, Flame_alert, eSetBits);
-                //UARTprintf("CO gas exceeds the threshold!\n");
         }
         xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
     }
@@ -305,6 +311,9 @@ void Flame_Task(TimerHandle_t xTimer2)
             xSemaphoreGive(my_sem);
     }
 
+/* Function: Humidity_Task
+ * Description: Reads Humidity value, stores it in a struct and sends it to the Log_Task via IPC message queue.
+ */
 void Humidity_Task(TimerHandle_t xTimer3)
 {
     if(xSemaphoreTake(my_sem, portMAX_DELAY))
@@ -313,27 +322,29 @@ void Humidity_Task(TimerHandle_t xTimer3)
         humidity_val = humidity(rh);
 
         msg_struct.data = humidity_val;
-        msg_struct.data_len = sizeof(humidity_val);
         msg_struct.TaskID = Humidity_task;
-        msg_struct.LogLevel = DATA;
-        msg_struct.alert = 0;
+
+        msg_struct.alert = 1;
+        //strcpy(msg_struct.a, "humidity");
 
         xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
 
         if (humidity_val < 20)
 
                 {
-                        xTaskNotify( AlertTaskHandle, Flame_alert, eSetBits);
-                        //UARTprintf("CO gas exceeds the threshold!\n");
+                        //xTaskNotify( AlertTaskHandle, Flame_alert, eSetBits);
                 }
 
         }
 
         xSemaphoreGive(my_sem);
 
-   // UARTprintf("RH= %d\n", humidity_val);
 }
 
+
+/* Function: Temp_Task
+ * Description: Reads temperature value, stores it in a struct and sends it to the Log_Task via IPC message queue.
+ */
 void Temp_Task(TimerHandle_t xTimer4)
 {
     if(xSemaphoreTake(my_sem, portMAX_DELAY))
@@ -342,16 +353,14 @@ void Temp_Task(TimerHandle_t xTimer4)
         temp_val = temp(tp);
 
         msg_struct.data = temp_val;
-        msg_struct.data_len = sizeof(temp_val);
         msg_struct.TaskID = Temperature_task;
-        msg_struct.LogLevel = DATA;
         msg_struct.alert = 0;
 
         xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
         if (temp_val > 35)
                 {
+
                         xTaskNotify( AlertTaskHandle, Flame_alert, eSetBits);
-                        //UARTprintf("CO gas exceeds the threshold!\n");
                 }
 
      }
@@ -361,6 +370,10 @@ void Temp_Task(TimerHandle_t xTimer4)
     //UARTprintf("Tp = %d\n",temp_val);
 }
 
+
+/* Function: Alert_Task
+ * Description: Receives notification from Gas_Task, Flame_Task, Humidity_Task and Temp_Task and sends the Alert message to BBG through UART
+ */
 void Alert_Task(void *pvParameters)
 {BaseType_t ret;
     int NotifValue = 0;
@@ -373,9 +386,9 @@ void Alert_Task(void *pvParameters)
                 {
                     if(xSemaphoreTake(my_sem, 250))
                      {
-                        sprintf(abuff, "AlERT! CO exceeds its threshold.\n\0");
-                        aptr = &abuff;
-                        UART_send(aptr, strlen(abuff));
+                        msg_struct.TaskID = Gas_task;
+                        msg_struct.alert = 1;
+                        xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
                      }
                     xSemaphoreGive(my_sem);
 
@@ -384,9 +397,10 @@ void Alert_Task(void *pvParameters)
                 {
                     if(xSemaphoreTake(my_sem, 250))
                     {
-                        sprintf(abuff, "AlERT! Flame sensor exceeds its threshold.\n\0");
-                        aptr = &abuff;
-                        UART_send(aptr, strlen(abuff));
+                        msg_struct.TaskID = Flame_task;
+                        msg_struct.alert = 1;
+                        xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
+
                      }
                      xSemaphoreGive(my_sem);
                 }
@@ -394,9 +408,9 @@ void Alert_Task(void *pvParameters)
                 {
                     if(xSemaphoreTake(my_sem, 250))
                     {
-                        sprintf(abuff, "AlERT! %HUmidity exceeds its threshold.\n\0");
-                        aptr = &abuff;
-                        UART_send(aptr, strlen(abuff));
+                        msg_struct.TaskID = Humidity_task;
+                        msg_struct.alert = 1;
+                        xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
                     }
                     xSemaphoreGive(my_sem);
                 }
@@ -404,9 +418,9 @@ void Alert_Task(void *pvParameters)
                 {
                     if(xSemaphoreTake(my_sem, 250))
                     {
-                        sprintf(abuff, "AlERT! Temperature exceeds its threshold.\n\0");
-                        aptr = &abuff;
-                        UART_send(aptr, strlen(abuff));
+                        msg_struct.TaskID = Temperature_task;
+                        msg_struct.alert = 1;
+                        xQueueSendToBack(myQueue, &msg_struct, portMAX_DELAY);
                      }
                      xSemaphoreGive(my_sem);
                 }
@@ -414,6 +428,7 @@ void Alert_Task(void *pvParameters)
             }
 }
 
+// Queue initialization
 
 void Queue_init()
 {
@@ -427,8 +442,25 @@ void Queue_init()
     sem_uart = xSemaphoreCreateMutex();
 }
 
+/*void UART_read(void *pvParameters)
+{
+    while(1)
+    {
+        while(UARTCharsAvail(UART2_BASE))
+        {
+               perror("Done");
+        }
+    }
+}*/
+
+/* Function: Log_task
+ * Description: Receives data struct via IPC message queue from Gas_task, Flame_Task, Humidity_Task and Temp_Task and sends it to BBG via UART
+ */
 void Log_Task(void *pvParameters)
 {
+    sprintf(buff2, "%s", "\n");
+    ptr2 = &buff2;
+
     while(uxQueueSpacesAvailable(myQueue) != myQueueLength)
     {
             if(xSemaphoreTake(my_sem, 250))
@@ -436,10 +468,15 @@ void Log_Task(void *pvParameters)
                  xQueueReceive(myQueue, &msg_struct, portMAX_DELAY);
             }
 
-        sprintf(buff1, "Data:%f, Length:%i, TaskId:%i, LogLevel:%i\n\0", msg_struct.data, msg_struct.data_len, msg_struct.TaskID, msg_struct.LogLevel);
-        ptr = &buff1;
+        //sprintf(buff1, "Data:%f, Length:%i, TaskId:%i, LogLevel:%i\n\0", msg_struct.data, msg_struct.data_len, msg_struct.TaskID, msg_struct.LogLevel);
+        //ptr = &buff1;
+        ptr = (uint8_t *)&msg_struct;
 
-        UART_send(ptr, strlen(buff1));
+        UART_send(ptr, sizeof(message));
+        //UART_send(ptr, sizeof(msg_struct));
+
+        /*if(msg_struct.TaskID == Temperature_task)
+            UART_send(ptr2, strlen(buff2));*/
         xSemaphoreGive(my_sem);
     }
 }

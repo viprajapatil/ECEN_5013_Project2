@@ -4,7 +4,7 @@
 #include "uart.h"
 #include "math.h"
 
-void adc_ch0_init()
+int adc_ch0_init()
 {
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
@@ -19,9 +19,11 @@ void adc_ch0_init()
 
     //ROM_ADCHardwareOversampleConfigure(ADC0_BASE,0);
     ADCSequenceEnable(ADC0_BASE, 3);
+
+    return 0;
     }
 
-void adc_ch1_init()
+int adc_ch1_init()
 {
     SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC1);
     //SysCtlPeripheralEnable(SYSCTL_PERIPH_ADC0);
@@ -36,6 +38,8 @@ void adc_ch1_init()
 
     //ROM_ADCHardwareOversampleConfigure(ADC0_BASE,0);
     ADCSequenceEnable(ADC1_BASE, 3);
+
+    return 0;
     }
 
 float co_val(uint32_t val)
