@@ -25,6 +25,8 @@
 #include <unistd.h>
 #include <netdb.h>
 #include <stdbool.h>
+#include "userled.h"
+#include "socket_task.h"
 
 struct termios *my_term;
 
@@ -34,12 +36,18 @@ int read_thread_check;
 pthread_t write_thread;
 int write_thread_check;
 
+pthread_t api_thread;
+int api_thread_check;
+
+pthread_t heartbeat_thread;
+int heartbeat_check;
+
 FILE * fptr;
 pthread_mutex_t pmutex;
 
 char * uart_driver = "/dev/ttyO4";
 char log_name[50];
-int fd;
+extern int fd;
 
 typedef struct
 {
@@ -82,6 +90,8 @@ void * read_thread_func()
 
 		if(retval > 0 && my_data.TaskID != 0)
 		{
+			if(my_data.alert == 2)
+				exit(-1);
 			printf("Task Id: %d \n", my_data.TaskID);
 			fprintf(fptr, "Task Id: %d \n", my_data.TaskID);
 			
@@ -97,6 +107,7 @@ void * read_thread_func()
 			strcpy(msg_data_string, "ALERT RECEIEVED FROM GAS SENSOR \n");
 			printf("%s", msg_data_string);
 			fprintf(fptr, "%s", msg_data_string);
+			userLED(3,1);
 			}
 
 			if(my_data.alert == 1 && my_data.TaskID == 2)
@@ -104,6 +115,7 @@ void * read_thread_func()
 			strcpy(msg_data_string, "ALERT RECEIEVED FROM FLAME SENSOR \n");
 			printf("%s", msg_data_string);
 			fprintf(fptr, "%s", msg_data_string);
+			userLED(2,1);
 			}
 
 			if(my_data.alert == 1 && my_data.TaskID == 3)
@@ -111,6 +123,7 @@ void * read_thread_func()
 			strcpy(msg_data_string, "ALERT RECEIEVED FROM TEMPERATURE SENSOR \n");
 			printf("%s", msg_data_string);
 			fprintf(fptr, "%s", msg_data_string);
+			userLED(3,1);
 			}
 
 			fprintf(fptr, "%s", "\n");
@@ -130,6 +143,74 @@ void * write_thread_func()
 	char data[3] = "Nik";
         i = write(fd, &data, sizeof(data));
 	printf("%d", i);
+}
+
+void * api_thread_func()
+{
+	socket_server();
+}
+
+void * hb_thread_func()
+{
+	int sock;
+	struct sockaddr_in check_server;
+	int mysock;
+	char buff[1024];
+	int rval;
+	int flag = 0;
+	//create socket
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if(sock < 0)
+	{
+		perror("Failed to create a socket");
+		exit(1);
+	}
+	
+	check_server.sin_family = AF_INET;
+	check_server.sin_addr.s_addr = INADDR_ANY;
+	check_server.sin_port = htons(6006);
+	
+	//bind
+	if(bind(sock, (struct sockaddr *)&check_server, sizeof(check_server)) < 0)
+	{
+		perror("Didn't bind");
+		exit(1);
+	}
+
+	//Listen
+	if(listen(sock, 5) < 0)
+	{
+		perror("Listening error");
+		exit(1);
+	}
+
+	//Accept
+	while(1)
+	{
+	mysock = accept(sock, (struct sockaddr *)0, 0);
+	if(mysock == -1)
+	{
+		perror("Accept failed");
+		exit(1);
+	}
+	int incoming;
+	
+	int data_in = read(mysock,&incoming,sizeof(incoming));
+     
+	if (data_in < 0)
+	{ 
+		perror("Error reading");
+		exit(1);
+	}
+
+	if(incoming  == 2)
+	{
+		printf("Temp task Dead\n");
+		break;
+	}
+
+	}
+	exit(1);
 }
 
 void uart_setup()
@@ -201,6 +282,22 @@ int main(int argc, char *argv[])
 		perror("Error creating read thread");
 		exit(-1);
 	}*/
+
+    api_thread_check = pthread_create(&api_thread, NULL, api_thread_func, NULL);
+	if(api_thread_check)
+	{
+		perror("Error creating read thread");
+		exit(-1);
+	}
+
+    /*heartbeat_check = pthread_create(&heartbeat_thread, NULL, hb_thread_func, NULL);
+	if(heartbeat_check)
+	{
+		perror("Error creating read thread");
+		exit(-1);
+	}*/
+
+    
     //fptr = fopen("log_name", "a");
 
     //while(1)
@@ -247,5 +344,7 @@ int main(int argc, char *argv[])
     //fclose(fptr);
 	pthread_join(read_thread, NULL);
 	//pthread_join(write_thread, NULL);
+	//pthread_join(api_thread, NULL);
+	//pthread_join(heartbeat_thread, NULL);
     }
 }
