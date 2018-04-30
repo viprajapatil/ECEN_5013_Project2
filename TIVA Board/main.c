@@ -1,3 +1,8 @@
+/*reference: https://github.com/akobyl/TM4C129_FreeRTOS_Demo
+ *
+ * main.c in which we create different tasks for sensors, logger and alert task.
+ * */
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
@@ -20,8 +25,6 @@
 #include "driverlib/adc.h"
 #include "driverlib/rom.h"
 
-#define LED_TOGGLE 0x00000001
-#define LOG_STRING 0x00000002
 #define myQueueLength 500
 
 #define ULONG_MAX 0xFFFFFFFF
@@ -45,7 +48,16 @@
 #include "uart.h"
 #include "gas_flame.h"
 #include "startup.h"
+#include "unit_test.h"
 //#include "logger.h"
+
+#include "inc/hw_memmap.h"
+#include "driverlib/gpio.h"
+#include "driverlib/pin_map.h"
+#include "driverlib/ssi.h"
+#include "driverlib/sysctl.h"
+#include "driverlib/uart.h"
+#include "utils/uartstdio.h"
 
 #define BAUD_RATE 115200
 #define SysClock 120000000
@@ -152,6 +164,87 @@ void UART_send(char* ptr, int len)
         xSemaphoreGive(sem_uart);
     }
 
+
+void ssi_init()
+{
+    // reference example code spi_master.c
+
+    int NUM_SSI_DATA =3;
+
+        uint32_t pui32DataTx[3];
+        uint32_t pui32DataRx[3];
+        uint32_t ui32Index;
+
+
+
+        // The SSI0 peripheral must be enabled for use.
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI3);
+
+
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+
+
+        GPIOPinConfigure(GPIO_PA2_SSI0CLK);
+        GPIOPinConfigure(GPIO_PA3_SSI0FSS);
+        GPIOPinConfigure(GPIO_PA4_SSI0XDAT0);
+        GPIOPinConfigure(GPIO_PA5_SSI0XDAT1);
+
+        //
+        // Configure the GPIO settings for the SSI pins.  This function also gives
+        // control of these pins to the SSI hardware.  Consult the data sheet to
+        // see which functions are allocated per pin.
+        // The pins are assigned as follows:
+        //      PA5 - SSI0Tx
+        //      PA4 - SSI0Rx
+        //      PA3 - SSI0Fss
+        //      PA2 - SSI0CLK
+        // TODO: change this to select the port/pin you are using.
+        //
+        GPIOPinTypeSSI(GPIO_PORTA_BASE, GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 |
+                       GPIO_PIN_2);
+
+
+        // Configure and enable the SSI port for SPI master mode.
+        SSIConfigSetExpClk(SSI3_BASE, g_ui32SysClock, SSI_FRF_MOTO_MODE_0,
+                           SSI_MODE_MASTER, 1000000, 8);
+
+        SSIAdvModeSet(SSI3_BASE, SSI_ADV_MODE_READ_WRITE);
+        SSIAdvFrameHoldEnable(SSI3_BASE);
+
+        // Enable the SSI0 module.
+        SSIEnable(SSI3_BASE);
+
+        while(SSIDataGetNonBlocking(SSI3_BASE, &pui32DataRx[0]))
+        {
+        }
+
+        //
+        // Initialize the data to send.
+        //
+        pui32DataTx[0] = 's';
+        pui32DataTx[1] = 'p';
+        pui32DataTx[2] = 'i';
+
+
+        for(ui32Index = 0; ui32Index < NUM_SSI_DATA; ui32Index++)
+        {
+            SSIDataPut(SSI3_BASE, pui32DataTx[ui32Index]);
+        }
+
+
+        // Wait until SSI0 is done transferring all the data in the transmit FIFO.
+        while(SSIBusy(SSI3_BASE))
+        {
+        }
+
+
+        // Receive 3 bytes of data.
+        for(ui32Index = 0; ui32Index < NUM_SSI_DATA; ui32Index++)
+        {
+            SSIDataGet(SSI3_BASE, &pui32DataRx[ui32Index]);
+        }
+}
+
 // Main function
 int main(void)
 {
@@ -160,6 +253,7 @@ int main(void)
                     SYSCTL_CFG_VCO_480), SysClock);
 
         ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);    //Enable GPIO
+       // ssi_init();
 
         if (startup() == -1)
             exit(-1);
@@ -167,6 +261,18 @@ int main(void)
         PinoutSet(false, false);
 
         ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
+
+        int testGas, testFlame, testTemp, alertGas, alertFlame, alertTemp, alertGasDis, alertFlameDis;
+
+        testGas = test_gas();
+        testFlame = test_flame();
+        testTemp = test_temp();
+        alertGas = alert_gas();
+        alertTemp = alert_temp();
+        alertFlame = alert_flame();
+        alertGasDis = alert_gas_disconnected();
+        alertFlameDis = alert_flame_disconnected();
+
 
         // Create tasks
 

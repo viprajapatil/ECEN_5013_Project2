@@ -14,7 +14,8 @@ C_SRCS += \
 ../si7021.c \
 ../startup.c \
 ../tm4c1294ncpdt_startup_ccs.c \
-../uart.c 
+../uart.c \
+../unit_test.c 
 
 C_DEPS += \
 ./gas_flame.d \
@@ -22,7 +23,8 @@ C_DEPS += \
 ./si7021.d \
 ./startup.d \
 ./tm4c1294ncpdt_startup_ccs.d \
-./uart.d 
+./uart.d \
+./unit_test.d 
 
 OBJS += \
 ./gas_flame.obj \
@@ -30,7 +32,8 @@ OBJS += \
 ./si7021.obj \
 ./startup.obj \
 ./tm4c1294ncpdt_startup_ccs.obj \
-./uart.obj 
+./uart.obj \
+./unit_test.obj 
 
 OBJS__QUOTED += \
 "gas_flame.obj" \
@@ -38,7 +41,8 @@ OBJS__QUOTED += \
 "si7021.obj" \
 "startup.obj" \
 "tm4c1294ncpdt_startup_ccs.obj" \
-"uart.obj" 
+"uart.obj" \
+"unit_test.obj" 
 
 C_DEPS__QUOTED += \
 "gas_flame.d" \
@@ -46,7 +50,8 @@ C_DEPS__QUOTED += \
 "si7021.d" \
 "startup.d" \
 "tm4c1294ncpdt_startup_ccs.d" \
-"uart.d" 
+"uart.d" \
+"unit_test.d" 
 
 C_SRCS__QUOTED += \
 "../gas_flame.c" \
@@ -54,6 +59,7 @@ C_SRCS__QUOTED += \
 "../si7021.c" \
 "../startup.c" \
 "../tm4c1294ncpdt_startup_ccs.c" \
-"../uart.c" 
+"../uart.c" \
+"../unit_test.c" 
 
 

@@ -27,7 +27,7 @@
 uint32_t i2cRead(int RegAddr)
 {
     uint16_t return_val[2];
-
+    int count = 0;
            I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, false);
 
            //specify register to be read
@@ -37,7 +37,9 @@ uint32_t i2cRead(int RegAddr)
            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_SINGLE_SEND);
 
            //wait for MCU to finish transaction
-           while(I2CMasterBusy(I2C0_BASE));
+           while(I2CMasterBusy(I2C0_BASE))
+           {
+           }
            //while(!(I2CSlaveStatus(I2C0_BASE) & I2C_SLAVE_ACT_TREQ));
            //specify that we are going to read from slave device
            I2CMasterSlaveAddrSet(I2C0_BASE, SLAVE_ADDRESS, true);

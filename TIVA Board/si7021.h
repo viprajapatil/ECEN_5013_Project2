@@ -40,6 +40,9 @@ double humidity_val, temp_val;
 uint32_t g_ui32SysClock;
 static uint16_t r;
 
+TaskHandle_t AlertTaskHandle;
+
+
 
 #define SLAVE_ADDRESS 0x40
 #define RH_ADDR 0xE5
