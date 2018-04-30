@@ -30,6 +30,12 @@
 
 struct termios *my_term;
 
+typedef enum
+{
+    Alive = 0,
+    Dead = 1,
+}command_enum;
+
 pthread_t read_thread;
 int read_thread_check;
 
@@ -64,34 +70,64 @@ void read_byte(int fd, char * received);
 
 void * read_thread_func()
 {
-	/*do
-	{
-	char recv;
-	fptr = fopen(log_name, "a");
-    	read_byte(fd, &recv);
-	fprintf(fptr, "%c", recv);
-	fclose(fptr);
-	}while(recv != '\0');
-	close(fd);*/
 	char buffer[1024];
 	fptr = fopen(log_name, "w");
 	char recv = 'a';
 	message my_data;
 	int retval;
+	int command;
+	int sock;
 	while(1)
 	{
 		fptr = fopen(log_name, "a");
 		pthread_mutex_lock(&pmutex);
 
-		//read_byte(fd, &recv);
 		retval = read(fd, &my_data, sizeof(message));
-		//message * received_data;
-		//received_data = (message *)buffer;
+
+		int sock;
+		struct sockaddr_in server;
+		char buff[1024];
+		struct hostent *hp;
+	
+		sock = socket(AF_INET, SOCK_STREAM, 0);
+		if(sock < 0)
+		{
+			perror("socket failed");
+			exit(1);
+		}
+		server.sin_family = AF_INET;
+		hp = gethostbyname("localhost");
+	if(hp == 0)
+	{
+		perror("gethost failed");
+		exit(1);
+	}
+	memcpy(&server.sin_addr, hp->h_addr, hp->h_length);
+	server.sin_port = htons(6006);
+	
+	if(connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
+	{
+		perror("connection failes");
+		exit(1);
+	}
+
+	int command = Alive;
+	
+	
+	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
+	{
+		perror("Send failed");
+		exit(1);
+	}
+	close(sock);
 
 		if(retval > 0 && my_data.TaskID != 0)
 		{
 			if(my_data.alert == 2)
+			{
+				printf("Connection Lost to sensor. Terminating Task");
 				exit(-1);
+			}
 			printf("Task Id: %d \n", my_data.TaskID);
 			fprintf(fptr, "Task Id: %d \n", my_data.TaskID);
 			
@@ -135,6 +171,12 @@ void * read_thread_func()
 		pthread_mutex_unlock(&pmutex);
 		fclose(fptr);
 	}
+	command = Dead;
+	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
+	{
+		perror("Send failed");
+		printf("Some thread dead, Terminating process\n");
+	}
 }
 
 void * write_thread_func()
@@ -147,7 +189,51 @@ void * write_thread_func()
 
 void * api_thread_func()
 {
+	int command;
+	int sock;
+		struct sockaddr_in server;
+		char buff[1024];
+		struct hostent *hp;
+	
+		sock = socket(AF_INET, SOCK_STREAM, 0);
+		if(sock < 0)
+		{
+			perror("socket failed");
+			exit(1);
+		}
+		server.sin_family = AF_INET;
+		hp = gethostbyname("localhost");
+	if(hp == 0)
+	{
+		perror("gethost failed");
+		exit(1);
+	}
+	memcpy(&server.sin_addr, hp->h_addr, hp->h_length);
+	server.sin_port = htons(6006);
+	
+	if(connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
+	{
+		perror("connection failes");
+		exit(1);
+	}
+
+	command = Alive;
+	
+	
+	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
+	{
+		perror("Send failed");
+		exit(1);
+	}
+	close(sock);
 	socket_server();
+
+	command = Dead;
+	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
+	{
+		perror("Send failed");
+		printf("Some thread dead, Terminating process\n");
+	}
 }
 
 void * hb_thread_func()
@@ -290,12 +376,12 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
-    /*heartbeat_check = pthread_create(&heartbeat_thread, NULL, hb_thread_func, NULL);
+    heartbeat_check = pthread_create(&heartbeat_thread, NULL, hb_thread_func, NULL);
 	if(heartbeat_check)
 	{
 		perror("Error creating read thread");
 		exit(-1);
-	}*/
+	}
 
     
     //fptr = fopen("log_name", "a");
