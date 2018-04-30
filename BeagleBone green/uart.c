@@ -1,5 +1,8 @@
 //Reference: https://en.wikibooks.org/wiki/Serial_Programming/termios
 
+//Filename : uart.c
+//This file acts as the main file on beaglebone side which creates the communcation, logger and API function
+
 #include "uart.h"
 #include "string.h"
 #include <stdio.h>
@@ -84,7 +87,7 @@ void * read_thread_func()
 
 		retval = read(fd, &my_data, sizeof(message));
 
-		int sock;
+		int sock;			//This part is heartbeat check
 		struct sockaddr_in server;
 		char buff[1024];
 		struct hostent *hp;
@@ -121,7 +124,7 @@ void * read_thread_func()
 	}
 	close(sock);
 
-		if(retval > 0 && my_data.TaskID != 0)
+		if(retval > 0 && my_data.TaskID != 0)		//checks the recived data
 		{
 			if(my_data.alert == 2)
 			{
@@ -138,7 +141,7 @@ void * read_thread_func()
 			printf("Alert: %d \n", my_data.alert);
 			fprintf(fptr, "Alert: %d \n", my_data.alert);
 			
-			char msg_data_string[100];
+			char msg_data_string[100];			//alerts below
 			if(my_data.alert == 1 && my_data.TaskID == 1)
 			{
 			strcpy(msg_data_string, "ALERT RECEIEVED FROM GAS SENSOR \n");
@@ -170,7 +173,7 @@ void * read_thread_func()
 		pthread_mutex_unlock(&pmutex);
 		fclose(fptr);
 	}
-	command = Dead;
+	command = Dead;				//Task Dead
 	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
 	{
 		userLED(3,1);
@@ -179,15 +182,15 @@ void * read_thread_func()
 	}
 }
 
-void * write_thread_func()
-{
+void * write_thread_func()			//write to UART
+{		
 	int i;
 	char data[3] = "Nik";
         i = write(fd, &data, sizeof(data));
 	printf("%d", i);
 }
 
-void * api_thread_func()
+void * api_thread_func()			//API function for external task
 {
 	int command;
 	int sock;
@@ -228,7 +231,7 @@ void * api_thread_func()
 	close(sock);
 	socket_server();
 
-	command = Dead;
+	command = Dead;						//Task Dead
 	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
 	{
 		userLED(3,1);
@@ -237,7 +240,7 @@ void * api_thread_func()
 	}
 }
 
-void * hb_thread_func()
+void * hb_thread_func()					//checks the heartbeat functionality of other tasks
 {
 	int sock;
 	struct sockaddr_in check_server;
@@ -300,7 +303,7 @@ void * hb_thread_func()
 	exit(1);
 }
 
-void uart_setup()
+void uart_setup()				//uart driver setup
 {
     fd = open(uart_driver, O_RDWR, O_SYNC, O_NOCTTY);
     if(fd < 0)
