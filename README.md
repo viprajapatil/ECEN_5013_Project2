@@ -1,4 +1,4 @@
-# APES_Project2
+# ECEN 5013 Project 2
 
 Title: Fire and smoke Detection System
 
