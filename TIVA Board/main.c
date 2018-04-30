@@ -379,7 +379,7 @@ void Gas_Task(TimerHandle_t xTimer1)
 
                     xTaskNotify( AlertTaskHandle, Co_alert, eSetBits);
                 }
-        if (f<3.2)
+        if (f<3.3)
                 {
 
                      xTaskNotify( AlertTaskHandle, Sensor_disconnected, eSetBits);
