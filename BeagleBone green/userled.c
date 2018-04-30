@@ -1,3 +1,7 @@
+//UserLED function to log error
+//filename: userled.c
+//Author: Nikhil and Vipraja
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "userled.h"
