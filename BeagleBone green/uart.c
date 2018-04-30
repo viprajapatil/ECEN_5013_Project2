@@ -126,6 +126,7 @@ void * read_thread_func()
 			if(my_data.alert == 2)
 			{
 				printf("Connection Lost to sensor. Terminating Task");
+				fprintf(fptr, "Connection Lost to sensor. Terminating Task");
 				exit(-1);
 			}
 			printf("Task Id: %d \n", my_data.TaskID);
@@ -165,8 +166,6 @@ void * read_thread_func()
 			fprintf(fptr, "%s", "\n");
 			printf("\n");
 		}
-//		fprintf(fptr, "%c", recv);
-//		printf("%c", recv);
 
 		pthread_mutex_unlock(&pmutex);
 		fclose(fptr);
@@ -174,6 +173,7 @@ void * read_thread_func()
 	command = Dead;
 	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
 	{
+		userLED(3,1);
 		perror("Send failed");
 		printf("Some thread dead, Terminating process\n");
 	}
@@ -231,6 +231,7 @@ void * api_thread_func()
 	command = Dead;
 	if(send(sock, (void*)&command, sizeof(command), 0) < 0)
 	{
+		userLED(3,1);
 		perror("Send failed");
 		printf("Some thread dead, Terminating process\n");
 	}
@@ -333,7 +334,8 @@ void read_byte(int fd,char *received)
 {
     if(read(fd, received, 1)<0)
     {
-           perror("Read failed");    
+           perror("Read failed"); 
+	userLED(3,1);   
     }
 }
 
@@ -345,6 +347,7 @@ int main(int argc, char *argv[])
     char recv;
     int rec_data;
     char received_string[100];
+    printf("Starting things\n");
 
     memset(log_name, '\0', sizeof(log_name));
     strncpy(log_name, argv[1], strlen(argv[1]));
@@ -359,6 +362,7 @@ int main(int argc, char *argv[])
 	if(read_thread_check)
 	{
 		perror("Error creating read thread");
+		userLED(3,1);
 		exit(-1);
 	}
 
@@ -373,6 +377,7 @@ int main(int argc, char *argv[])
 	if(api_thread_check)
 	{
 		perror("Error creating read thread");
+		userLED(3,1);
 		exit(-1);
 	}
 
@@ -380,10 +385,11 @@ int main(int argc, char *argv[])
 	if(heartbeat_check)
 	{
 		perror("Error creating read thread");
+		userLED(3,1);
 		exit(-1);
 	}
 
-    
+    printf("Threads created\n");
     //fptr = fopen("log_name", "a");
 
     //while(1)
