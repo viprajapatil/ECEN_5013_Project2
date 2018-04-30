@@ -1,4 +1,3 @@
-// light task
 /*
 @file - socket_task.c
 @brief - Includes all the functions for socket server
@@ -42,7 +41,7 @@ void socket_server()
 	
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(6005);
+	server.sin_port = htons(6011);
 	
 	//bind
 	if(bind(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
@@ -80,14 +79,15 @@ void socket_server()
 	int i;
 
 	if(incoming == 1)
-	for(i = 0; i< 2; i++)
+	for(i = 0; i< 3; i++)
 	{
 		message my_data;
 		read(fd, &my_data, sizeof(message));
 		if(my_data.TaskID != 1)
 			continue;
 		printf("External request serviced");
-		
+		//if(my_data.TaskID == 1)
+		{
 		printf("Task Id: %d \n", my_data.TaskID);
 		//fprintf(fptr, "Task Id: %d \n", my_data.TaskID);
 			
@@ -98,6 +98,7 @@ void socket_server()
 		//fprintf(fptr, "Alert: %d \n", my_data.alert);
 
 		printf("\n");
+		}
 
 		float value = my_data.data;
 		int data_out = send(mysock, (void*)&value, sizeof(value), 0);
