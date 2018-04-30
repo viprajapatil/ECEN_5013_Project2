@@ -56,6 +56,7 @@ FILE * fptr;
 pthread_mutex_t pmutex;
 
 char * uart_driver = "/dev/ttyO4";
+//char * spi_driver = "/dev/SSIDEV0";
 char log_name[50];
 extern int fd;
 
@@ -67,6 +68,10 @@ typedef struct
 }message;
 
 void uart_setup();
+
+//void spi_setup();
+
+//void spi_read();
 
 void termios_setup(struct termios * my_term, int descriptor);
 
@@ -342,6 +347,27 @@ void read_byte(int fd,char *received)
 	userLED(3,1);   
     }
 }
+
+/*void spi_setup()				//spi driver setup
+{
+    fd = open(spi_driver, O_RDWR, O_SYNC, O_NOCTTY);
+    if(fd < 0)
+    {
+	perror("Error opening spi driver");
+    }
+}
+
+void spi_read()
+{
+	int n;
+	n =read(fd,&rec,sizeof(rec));
+	if(fd < 0)
+      {
+	   perror("Error reading spi driver");
+      }
+
+}*/
+
 
 
 int main(int argc, char *argv[])
