@@ -86,6 +86,7 @@ void socket_server()
 		if(my_data.TaskID != 1)
 			continue;
 		printf("External request serviced");
+		//fprintf(fptr, "External request services");
 		//if(my_data.TaskID == 1)
 		{
 		printf("Task Id: %d \n", my_data.TaskID);
@@ -107,7 +108,7 @@ void socket_server()
 			perror("Error writing");
 			exit(1);
 		}
-		printf("Data sent back");
+		printf("Data sent back\n");
 
 		break;
 	}
@@ -120,6 +121,7 @@ void socket_server()
 		if(my_data.TaskID != 2)
 			continue;
 		printf("External request serviced");
+		//fprintf(fptr, "External request services");
 		
 		printf("Task Id: %d \n", my_data.TaskID);
 		//fprintf(fptr, "Task Id: %d \n", my_data.TaskID);
@@ -139,7 +141,7 @@ void socket_server()
 			perror("Error writing");
 			exit(1);
 		}
-		printf("Data sent back");
+		printf("Data sent back\n");
 
 		break;
 	}
@@ -152,6 +154,7 @@ void socket_server()
 		if(my_data.TaskID != 3)
 			continue;
 		printf("External request serviced");
+		//fprintf(fptr, "External request services");
 		
 		printf("Task Id: %d \n", my_data.TaskID);
 		//fprintf(fptr, "Task Id: %d \n", my_data.TaskID);
