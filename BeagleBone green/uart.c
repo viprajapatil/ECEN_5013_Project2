@@ -1,6 +1,7 @@
 //Reference: https://en.wikibooks.org/wiki/Serial_Programming/termios
 
 //Filename : uart.c
+//Author : Nikhil and Vipraja
 //This file acts as the main file on beaglebone side which creates the communcation, logger and API function
 
 #include "uart.h"
