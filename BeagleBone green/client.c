@@ -28,8 +28,7 @@ void main(int argc, char *argv[])
 	printf("List of commands available:\n");
 	printf("1. Get CO gas value\n");
 	printf("2. Get Flame sensor value\n");
-	printf("3. Get Humidity value\n");
-	printf("4. Get Temperature\n");
+	printf("3. Get Temperature\n");
 	printf("Enter approprate command number\n");
 
 	scanf("%d", &command);
@@ -47,7 +46,7 @@ void main(int argc, char *argv[])
 		exit(1);
 	}
 	memcpy(&server.sin_addr, hp->h_addr, hp->h_length);
-	server.sin_port = htons(6005);
+	server.sin_port = htons(6011);
 	
 	if(connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
 	{
@@ -76,8 +75,30 @@ void main(int argc, char *argv[])
         	perror("Read failed");
 		exit(1);
 	}
-	printf("Data got back: %f", incoming);
+	printf("Data got back: %f \n", incoming);
 
+	if(command == 1)
+	{	
+		if(incoming < 9 && incoming >3.5)
+		{
+			printf("Gas API functionality successful in normal condition\n");
+		}
+	}
+
+	if(command == 2)
+	{	
+		if(incoming < 4000 && incoming > 200)
+		{
+			printf("Fire API functionalty successful in normal condition\n");
+		}
+	}
+	if(command == 3)
+	{	
+		if(incoming < 35 && incoming > 15)
+		{
+			printf("Temperature API functionalty successful in normal condition\n");
+		}
+	}
 	//close(sock);
 	//exit(1);
 	sleep(1);
